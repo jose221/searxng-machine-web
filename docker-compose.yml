@@ -3,10 +3,8 @@ services:
     image: docker.io/searxng/searxng:latest
     container_name: searxng-core
     restart: always
-    # Conservamos el puerto para validación externa
     ports:
       - "8123:8080"
-    # Conectamos a la red de Coolify para comunicación interna
     networks:
       - coolify
     environment:
@@ -14,10 +12,16 @@ services:
       - SEARXNG_REDIS_URL=redis://:Gonzales220@84.247.137.97:6379/1
       - SEARXNG_BASE_URL=http://84.247.137.97:8123/
       - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
+
+      # ESTO ES LO QUE DESBLOQUEA EL JSON DE RAÍZ:
+      # Forzamos la desactivación de la seguridad de bots individualmente
+      - SEARXNG_BOTDETECTION_INTERNAL_AUTH_ACTIVE=false
+      - SEARXNG_SEARCH_FORMATS=html,json
       
-      # INYECCIÓN MAESTRA:
-      # Desactivamos botdetection.internal_auth para que el formato JSON sea libre.
-      - SEARXNG_SETTINGS={"use_default_settings":true,"server":{"image_proxy":true},"search":{"formats":["html","json"]},"engines":[{"name":"wikidata","disabled":true},{"name":"ahmia","disabled":true},{"name":"torch","disabled":true}],"enabled_plugins":["Hash plugin","Self hoster"],"botdetection":{"ip_limit":{"stats_time_window":3600,"filter_link_local":true},"internal_auth":{"active":false}},"ratelimit":{"method":"ip","limit_window":600,"limit_cnt":100}}
+      # Opcional para limpiar logs
+      - SEARXNG_ENGINES_WIKIDATA_DISABLED=true
+      - SEARXNG_ENGINES_AHMIA_DISABLED=true
+      - SEARXNG_ENGINES_TORCH_DISABLED=true
 
 networks:
   coolify:
