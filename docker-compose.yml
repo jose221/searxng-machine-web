@@ -1,16 +1,15 @@
 services:
   # PROXY MANAGER: Montado y listo para cuando lo necesites
   privoxy:
-    image: vimagick/privoxy
+    build:
+      context: .
+      dockerfile: Dockerfile.privoxy
     container_name: privoxy-manager
+    ports:
+      - "8118:8118"
     restart: always
     networks:
       - coolify
-    # El puerto 8118 queda interno, pero puedes exponerlo si quieres probarlo desde tu Mac
-    # ports:
-    #   - "8118:8118"
-    volumes:
-      - ./privoxy/config:/etc/privoxy/config:ro
   # MOTOR 1: SearXNG (Optimizado para JSON e IA)
   searxng:
     build:
