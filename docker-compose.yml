@@ -2,16 +2,12 @@ services:
   searxng:
     container_name: searxng
     image: docker.io/searxng/searxng:latest
-    networks:
-      - scraping_network
     ports:
-      - "8080:8080"
+      - "8123:8080" # Tu acceso externo
     volumes:
       - ./searxng:/etc/searxng:rw
     environment:
       - SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
+      # Construcción de la URL con tus credenciales
+      - SEARXNG_REDIS_URL=redis://:Gonzales220@84.247.137.97:6379/0
     restart: always
-
-networks:
-  scraping_network:
-    driver: bridge
