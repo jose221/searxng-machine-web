@@ -1,6 +1,9 @@
 services:
+  # MOTOR 1: SearXNG (Optimizado para JSON e IA)
   searxng:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: searxng-core
     restart: always
     ports:
@@ -10,6 +13,27 @@ services:
     environment:
       - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/1
       - SEARXNG_REDIS_URL=redis://:Gonzales220@84.247.137.97:6379/1
+
+  # MOTOR 2: Whoogle (Privacidad y Estabilidad via Tor)
+  whoogle-search:
+    image: benbusby/whoogle-search:latest
+    container_name: whoogle-search
+    restart: always
+    ports:
+      - "8124:5000"
+    networks:
+      - coolify
+    environment:
+      - WHOOGLE_CONFIG_GET_ONLY=1
+      - WHOOGLE_CONFIG_THEME=dark
+      - WHOOGLE_CONFIG_ALTS=1
+      - WHOOGLE_CONFIG_LANGUAGE=es
+      - WHOOGLE_CONFIG_COUNTRY=MX
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
 networks:
   coolify:
