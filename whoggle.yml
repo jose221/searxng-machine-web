@@ -1,0 +1,17 @@
+services:
+  whoogle-search:
+    image: ${WHOOGLE_IMAGE:-benbusby/whoogle-search:latest}
+    container_name: whoogle-search
+    restart: always
+    ports:
+      - "8124:5000"
+    environment:
+      - WHOOGLE_CONFIG_GET_ONLY=1
+      - WHOOGLE_CONFIG_THEME=dark
+      - WHOOGLE_CONFIG_ALTS=1
+      # Simple and effective
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
