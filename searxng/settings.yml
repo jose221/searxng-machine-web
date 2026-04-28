@@ -1,0 +1,26 @@
+use_default_settings: true
+
+server:
+  port: 8080
+  bind_address: "0.0.0.0"
+  secret_key: "generar_un_hash_seguro_aqui" # Puedes usar: openssl rand -hex 32
+
+search:
+  safe_search: 0
+  autocomplete: ""
+
+# ESTO ES VITAL: Habilita la respuesta en formato JSON para tu API
+formats:
+  - html
+  - json
+
+engines:
+  - name: google
+    engine: google
+    shortcut: g
+  - name: bing
+    engine: bing
+    shortcut: b
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: ddg
