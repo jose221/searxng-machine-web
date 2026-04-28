@@ -2,8 +2,6 @@ services:
   searxng:
     container_name: searxng
     image: docker.io/searxng/searxng:latest
-    networks:
-      - scraping_network
     ports:
       - "8123:8080"
     environment:
@@ -15,7 +13,3 @@ services:
       - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
       - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/0
     restart: always
-
-networks:
-  scraping_network:
-    external: true # O driver: bridge si no la has creado
