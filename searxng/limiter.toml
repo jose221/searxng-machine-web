@@ -1,7 +1,0 @@
-[botdetection]
-external_auth = false
-
-[ratelimit]
-method = "ip"
-limit_window = 600
-limit_cnt = 100
