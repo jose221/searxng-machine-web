@@ -1,17 +1,17 @@
 services:
   searxng:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: searxng
-    image: docker.io/searxng/searxng:latest
     ports:
       - "8123:8080"
     environment:
-      # Conexión directa por DNS interno de Docker a tu Redis de producción usando DB 1
-      - SEARXNG_VALKEY_URL=redis://:Gonzales220@redis_production:6379/1
-      - SEARXNG_REDIS_URL=redis://:Gonzales220@redis_production:6379/1
+      # Apuntamos a la ruta que creamos en el Dockerfile
+      - SEARXNG_SETTINGS_PATH=/opt/searxng_config/settings.yml
       
+      # Conexión a Redis usando el nombre del contenedor
+      - SEARXNG_VALKEY_URL=redis://:Gonzales220@redis_production:6379/0
       - SEARXNG_BASE_URL=http://84.247.137.97:8123/
       - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
-      
-      # JSON limpio que desactiva motores problemáticos y fuerza salida JSON
-      - SEARXNG_SETTINGS={"use_default_settings":true,"server":{"image_proxy":true},"search":{"formats":["html","json"]},"engines":[{"name":"wikidata","disabled":true},{"name":"ahmia","disabled":true},{"name":"torch","disabled":true}]}
     restart: always
