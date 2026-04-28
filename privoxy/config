@@ -1,0 +1,7 @@
+listen-address  0.0.0.0:8118
+
+# Por ahora, todo el tráfico sale directo (sin proxy)
+forward / .
+
+# Cuando necesites Asocks, comenta la línea de arriba y usa esta:
+# forward-socks5t / user:password@proxy.asocks.com:port .
