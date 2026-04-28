@@ -1,19 +1,29 @@
+name: searxng
+
 services:
-  searxng:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: searxng
+  core:
+    container_name: searxng-core
+    image: docker.io/searxng/searxng:latest
+    restart: always
     ports:
       - "8123:8080"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
+    networks:
+      - coolify
     environment:
-      - SEARXNG_SETTINGS_PATH=/opt/searxng_config/settings.yml
-      # Usamos la IP pública directamente para ignorar el DNS interno de Docker
-      - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/1
-      - SEARXNG_REDIS_URL=redis://:Gonzales220@84.247.137.97:6379/1
+      # Variables de entorno estándar oficiales
       - SEARXNG_BASE_URL=http://84.247.137.97:8123/
       - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
-    restart: always
+      - SEARXNG_VALKEY_URL=redis://:Gonzales220@redis_production:6379/1
+      - SEARXNG_REDIS_URL=redis://:Gonzales220@redis_production:6379/1
+    volumes:
+      # El flag :Z es crítico para evitar el PermissionError en entornos estrictos
+      - ./core-config/:/etc/searxng/:Z
+      # Volumen administrado por Docker para la caché temporal de los workers
+      - core-data:/var/cache/searxng/
+
+volumes:
+  core-data:
+
+networks:
+  coolify:
+    external: true
