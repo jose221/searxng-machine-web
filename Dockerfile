@@ -2,15 +2,15 @@ FROM docker.io/searxng/searxng:latest
 
 USER root
 
-# Creamos una carpeta segura fuera del alcance del volumen por defecto
-RUN mkdir -p /custom_config
+# Creamos una ruta personalizada que no colisione con volúmenes de la imagen base
+RUN mkdir -p /opt/searxng_config
 
-# Copiamos tus archivos ahí
-COPY ./config/settings.yml /custom_config/settings.yml
-COPY ./config/limiter.toml /custom_config/limiter.toml
+# Copiamos tus archivos de configuración
+COPY ./config/settings.yml /opt/searxng_config/settings.yml
+COPY ./config/limiter.toml /opt/searxng_config/limiter.toml
 
-# Permisos para el usuario interno
-RUN chown -R searxng:searxng /custom_config/ && \
-    chmod -R 755 /custom_config/
+# Ajuste de permisos para el usuario searxng (UID 1000)
+RUN chown -R searxng:searxng /opt/searxng_config && \
+    chmod -R 755 /opt/searxng_config
 
 USER searxng
