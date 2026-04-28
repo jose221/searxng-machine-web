@@ -7,7 +7,7 @@ services:
     volumes:
       - ./searxng:/etc/searxng:rw
     environment:
-      - SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
+      - SEARXNG_SETTINGS_PATH=/searxng/settings.yml
       # Actualizado a VALKEY_URL para el estándar 2026
       - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/0
     restart: always
