@@ -2,7 +2,7 @@ FROM docker.io/searxng/searxng:latest
 
 USER root
 
-# Usamos un bloque cat <<EOF para asegurar que el formato sea YAML válido
+# Inyectamos la configuración limpia para evitar el Forbidden
 RUN cat <<EOF > /etc/searxng/settings.yml
 use_default_settings: true
 server:
