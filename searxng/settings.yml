@@ -1,11 +1,11 @@
+# settings.yml
 use_default_settings: true
 
 server:
   port: 8080
   bind_address: "0.0.0.0"
-  secret_key: "423e123421312312312" 
+  secret_key: "Gonzales2026_Secret_Key" # Cambia esto
   base_url: http://84.247.137.97:8123/
-  image_proxy: true
 
 search:
   safe_search: 0
@@ -13,7 +13,11 @@ search:
 
 formats:
   - html
-  - json # Fundamental para que tu API de Python lea los resultados
+  - json
+
+# USAR VALKEY EN LUGAR DE REDIS
+valkey:
+  url: redis://:Gonzales220@84.247.137.97:6379/0
 
 engines:
   - name: google
@@ -21,12 +25,12 @@ engines:
   - name: bing
     engine: bing
   - name: wikidata
-    disabled: true
+    disabled: true  # <--- Mata el KeyError: 'name'
   - name: ahmia
-    disabled: true
+    disabled: true  # <--- Mata el error de Tor
   - name: torch
-    disabled: true
+    disabled: true   # <--- Mata el error de Tor
 
-redis:
-  # Reforzamos la conexión aquí también
-  url: redis://:Gonzales220@84.247.137.97:6379/0
+enabled_plugins:
+  - 'Hash plugin'
+  - 'Self hoster'
