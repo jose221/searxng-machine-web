@@ -6,17 +6,18 @@ services:
     container_name: searxng
     ports:
       - "8123:8080"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     networks:
-      - coolify # <-- ESTO ES LO QUE FALTA
+      - coolify
     environment:
       - SEARXNG_SETTINGS_PATH=/opt/searxng_config/settings.yml
-      # Usamos la base de datos 1 para no ensuciar tu producción
       - SEARXNG_VALKEY_URL=redis://:Gonzales220@redis_production:6379/1
       - SEARXNG_BASE_URL=http://84.247.137.97:8123/
       - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
     restart: always
 
-# Le decimos a Docker que esta red ya existe y Coolify la maneja
 networks:
   coolify:
     external: true
