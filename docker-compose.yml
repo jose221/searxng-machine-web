@@ -1,16 +1,19 @@
 services:
   searxng:
     image: docker.io/searxng/searxng:latest
-    container_name: searxng-core
+    container_name: searxng-core  # <-- Este será tu "host"
     restart: always
+    # NO EXPOSEMOS PUERTOS AL MUNDO
     ports:
       - "8123:8080"
+    networks:
+      - coolify
     environment:
-      # Direct connection to your production Redis
       - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/1
-      - SEARXNG_REDIS_URL=redis://:Gonzales220@84.247.137.97:6379/1
-      - SEARXNG_BASE_URL=http://84.247.137.97:8123/
+      - SEARXNG_BASE_URL=http://searxng-core:8080/
       - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
-      
-      # The master override: Forces IPv4, disables dead engines, outputs JSON
-      - SEARXNG_SETTINGS={"use_default_settings":true,"network":{"network_type":"ipv4"},"search":{"formats":["html","json"]},"engines":[{"name":"wikidata","disabled":true},{"name":"ahmia","disabled":true},{"name":"torch","disabled":true}]}
+      - SEARXNG_SETTINGS={"use_default_settings":true,"server":{"image_proxy":true},"search":{"formats":["html","json"]},"botdetection":{"internal_auth":{"active":false}}}
+
+networks:
+  coolify:
+    external: true
