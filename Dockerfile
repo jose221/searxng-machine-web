@@ -2,12 +2,27 @@ FROM docker.io/searxng/searxng:latest
 
 USER root
 
-RUN mkdir -p /opt/searxng_config
+# Creamos un settings.yml que abre TODO de raíz
+RUN echo 'use_default_settings: true\n\
+server:\n\
+  secret_key: "Gonzales2026_Key_Secure"\n\
+  base_url: "http://84.247.137.97:8123/"\n\
+  image_proxy: true\n\
+search:\n\
+  formats:\n\
+    - html\n\
+    - json\n\
+botdetection:\n\
+  ip_limit:\n\
+    filter_link_local: true\n\
+  internal_auth:\n\
+    active: false\n\
+ratelimit:\n\
+  method: ip\n\
+  limit_window: 600\n\
+  limit_cnt: 100' > /etc/searxng/settings.yml
 
-COPY ./config/settings.yml /opt/searxng_config/settings.yml
-COPY ./config/limiter.toml /opt/searxng_config/limiter.toml
-
-RUN chown -R searxng:searxng /opt/searxng_config && \
-    chmod -R 755 /opt/searxng_config
+# Permisos para que el usuario searxng pueda leerlo
+RUN chown searxng:searxng /etc/searxng/settings.yml && chmod 644 /etc/searxng/settings.yml
 
 USER searxng
