@@ -3,24 +3,30 @@ use_default_settings: true
 server:
   port: 8080
   bind_address: "0.0.0.0"
-  secret_key: "generar_un_hash_seguro_aqui" # Puedes usar: openssl rand -hex 32
+  secret_key: "423e123421312312312" 
+  base_url: http://84.247.137.97:8123/
+  image_proxy: true
 
 search:
   safe_search: 0
   autocomplete: ""
 
-# ESTO ES VITAL: Habilita la respuesta en formato JSON para tu API
 formats:
   - html
-  - json
+  - json # Fundamental para que tu API de Python lea los resultados
 
 engines:
   - name: google
     engine: google
-    shortcut: g
   - name: bing
     engine: bing
-    shortcut: b
-  - name: duckduckgo
-    engine: duckduckgo
-    shortcut: ddg
+  - name: wikidata
+    disabled: true
+  - name: ahmia
+    disabled: true
+  - name: torch
+    disabled: true
+
+redis:
+  # Reforzamos la conexión aquí también
+  url: redis://:Gonzales220@84.247.137.97:6379/0
