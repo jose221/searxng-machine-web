@@ -3,11 +3,11 @@ services:
     container_name: searxng
     image: docker.io/searxng/searxng:latest
     ports:
-      - "8123:8080" # Tu acceso externo
+      - "8123:8080"
     volumes:
       - ./searxng:/etc/searxng:rw
     environment:
       - SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
-      # Construcción de la URL con tus credenciales
-      - SEARXNG_REDIS_URL=redis://:Gonzales220@84.247.137.97:6379/0
+      # Actualizado a VALKEY_URL para el estándar 2026
+      - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/0
     restart: always
