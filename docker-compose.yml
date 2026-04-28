@@ -1,15 +1,14 @@
 services:
   searxng:
     container_name: searxng
-    image: docker.io/searxng/searxng:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8123:8080"
     environment:
-      # --- SERVER CONFIG ---
-      - SEARXNG_SETTINGS={"use_default_settings":true,"server":{"base_url":"http://84.247.137.97:8123/","secret_key":"Gonzales2026_Key_Secure","image_proxy":true},"search":{"formats":["html","json"]},"engines":[{"name":"wikidata","disabled":true},{"name":"ahmia","disabled":true},{"name":"torch","disabled":true}],"valkey":{"url":"redis://:Gonzales220@84.247.137.97:6379/0"}}
-      
-      # --- DIRECT ENV OVERRIDES (Para asegurar) ---
+      # Ya no necesitamos SEARXNG_SETTINGS_PATH porque los archivos ya están donde deben estar por defecto
+      - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/0
       - SEARXNG_BASE_URL=http://84.247.137.97:8123/
       - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
-      - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/0
     restart: always
