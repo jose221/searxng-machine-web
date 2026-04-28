@@ -1,17 +1,16 @@
 services:
-  whoogle-search:
-    image: ${WHOOGLE_IMAGE:-benbusby/whoogle-search:latest}
-    container_name: whoogle-search
+  searxng:
+    image: docker.io/searxng/searxng:latest
+    container_name: searxng-core
     restart: always
     ports:
-      - "8124:5000"
+      - "8123:8080"
     environment:
-      - WHOOGLE_CONFIG_GET_ONLY=1
-      - WHOOGLE_CONFIG_THEME=dark
-      - WHOOGLE_CONFIG_ALTS=1
-      # Simple and effective
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
+      # Direct connection to your production Redis
+      - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/1
+      - SEARXNG_REDIS_URL=redis://:Gonzales220@84.247.137.97:6379/1
+      - SEARXNG_BASE_URL=http://84.247.137.97:8123/
+      - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
+      
+      # The master override: Forces IPv4, disables dead engines, outputs JSON
+      - SEARXNG_SETTINGS={"use_default_settings":true,"network":{"network_type":"ipv4"},"search":{"formats":["html","json"]},"engines":[{"name":"wikidata","disabled":true},{"name":"ahmia","disabled":true},{"name":"torch","disabled":true}]}
