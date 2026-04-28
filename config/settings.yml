@@ -1,0 +1,32 @@
+use_default_settings: true
+
+server:
+  port: 8080
+  bind_address: "0.0.0.0"
+  secret_key: "Gonzales2026_Key_Secure"
+  base_url: http://84.247.137.97:8123/
+  image_proxy: true
+
+search:
+  safe_search: 0
+  autocomplete: ""
+  formats:
+    - html
+    - json
+
+engines:
+  - name: google
+    engine: google
+    use_official_api: false
+  - name: bing
+    engine: bing
+  - name: wikidata
+    disabled: true
+  - name: ahmia
+    disabled: true
+  - name: torch
+    disabled: true
+
+enabled_plugins:
+  - 'Hash plugin'
+  - 'Self hoster'
