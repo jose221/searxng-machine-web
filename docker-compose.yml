@@ -10,15 +10,19 @@ services:
     networks:
       - coolify
     environment:
-      # Variables de entorno estándar oficiales
       - SEARXNG_BASE_URL=http://84.247.137.97:8123/
       - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
       - SEARXNG_VALKEY_URL=redis://:Gonzales220@redis_production:6379/1
       - SEARXNG_REDIS_URL=redis://:Gonzales220@redis_production:6379/1
+      
+      # Aquí le inyectamos la configuración sin necesidad de archivos:
+      # 1. Fuerza IPv4 para evitar el crash de red.
+      # 2. Habilita JSON.
+      # 3. Desactiva Wikidata, Ahmia y Torch.
+      - SEARXNG_SETTINGS={"use_default_settings":true,"network":{"network_type":"ipv4"},"search":{"formats":["html","json"]},"engines":[{"name":"wikidata","disabled":true},{"name":"ahmia","disabled":true},{"name":"torch","disabled":true}]}
+      
     volumes:
-      # El flag :Z es crítico para evitar el PermissionError en entornos estrictos
-      - ./core-config/:/etc/searxng/:Z
-      # Volumen administrado por Docker para la caché temporal de los workers
+      # Usamos un volumen administrado por Docker, no una ruta local, para la caché oficial
       - core-data:/var/cache/searxng/
 
 volumes:
