@@ -5,7 +5,7 @@ services:
     ports:
       - "8123:8080"
     volumes:
-      - ./settings/:/etc/searxng/:Z
+      - ./config/:/etc/searxng/:Z
     environment:
       # Conexión brutal a tu IP pública. Nos saltamos el DNS roto de Docker/Coolify.
       - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/1
