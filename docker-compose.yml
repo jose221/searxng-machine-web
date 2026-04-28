@@ -2,13 +2,20 @@ services:
   searxng:
     container_name: searxng
     image: docker.io/searxng/searxng:latest
+    networks:
+      - scraping_network
     ports:
       - "8123:8080"
-    volumes:
-      # RUTA RELATIVA en el VPS : RUTA ABSOLUTA dentro del Docker
-      - ./searxng:/etc/searxng:rw 
     environment:
-      # Esta ruta DEBE ser la absoluta de la derecha del volumen de arriba
-      - SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml
+      # --- SERVER CONFIG ---
+      - SEARXNG_SETTINGS={"use_default_settings":true,"server":{"base_url":"http://84.247.137.97:8123/","secret_key":"Gonzales2026_Key_Secure","image_proxy":true},"search":{"formats":["html","json"]},"engines":[{"name":"wikidata","disabled":true},{"name":"ahmia","disabled":true},{"name":"torch","disabled":true}],"valkey":{"url":"redis://:Gonzales220@84.247.137.97:6379/0"}}
+      
+      # --- DIRECT ENV OVERRIDES (Para asegurar) ---
+      - SEARXNG_BASE_URL=http://84.247.137.97:8123/
+      - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
       - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/0
     restart: always
+
+networks:
+  scraping_network:
+    external: true # O driver: bridge si no la has creado
