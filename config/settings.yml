@@ -7,6 +7,10 @@ server:
   base_url: http://84.247.137.97:8123/
   image_proxy: true
 
+# --- EL FIX ESTÁ AQUÍ ---
+network:
+  network_type: ipv4
+
 search:
   safe_search: 0
   formats:
