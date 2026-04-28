@@ -1,16 +1,16 @@
-# Usa la imagen oficial como base
 FROM docker.io/searxng/searxng:latest
 
-# Cambiamos a root temporalmente para copiar y asignar permisos
 USER root
 
-# Copiamos la configuración desde tu repositorio a la ruta absoluta del contenedor
-COPY ./config/settings.yml /etc/searxng/settings.yml
-COPY ./config/limiter.toml /etc/searxng/limiter.toml
+# Creamos una carpeta segura fuera del alcance del volumen por defecto
+RUN mkdir -p /custom_config
 
-# Aseguramos que el usuario interno 'searxng' sea el dueño de los archivos
-RUN chown -R searxng:searxng /etc/searxng/ && \
-    chmod -R 755 /etc/searxng/
+# Copiamos tus archivos ahí
+COPY ./config/settings.yml /custom_config/settings.yml
+COPY ./config/limiter.toml /custom_config/limiter.toml
 
-# Volvemos al usuario sin privilegios por seguridad
+# Permisos para el usuario interno
+RUN chown -R searxng:searxng /custom_config/ && \
+    chmod -R 755 /custom_config/
+
 USER searxng
