@@ -9,15 +9,11 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    networks:
-      - coolify
     environment:
       - SEARXNG_SETTINGS_PATH=/opt/searxng_config/settings.yml
-      - SEARXNG_VALKEY_URL=redis://:Gonzales220@redis_production:6379/1
+      # Usamos la IP pública directamente para ignorar el DNS interno de Docker
+      - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/1
+      - SEARXNG_REDIS_URL=redis://:Gonzales220@84.247.137.97:6379/1
       - SEARXNG_BASE_URL=http://84.247.137.97:8123/
       - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
     restart: always
-
-networks:
-  coolify:
-    external: true
