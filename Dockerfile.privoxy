@@ -1,0 +1,11 @@
+FROM vimagick/privoxy
+
+# Creamos la configuración básica "en espera"
+RUN echo 'listen-address  0.0.0.0:8118\n\
+forward / .' > /etc/privoxy/config
+
+# Si ya tienes tus datos de Asocks, usa esta línea en lugar de la anterior:
+# RUN echo 'listen-address  0.0.0.0:8118\n\
+# forward-socks5t / user:password@proxy.asocks.com:port .' > /etc/privoxy/config
+
+EXPOSE 8118
