@@ -2,27 +2,35 @@ FROM docker.io/searxng/searxng:latest
 
 USER root
 
-# Creamos un settings.yml que abre TODO de raíz
-RUN echo 'use_default_settings: true\n\
-server:\n\
-  secret_key: "Gonzales2026_Key_Secure"\n\
-  base_url: "http://84.247.137.97:8123/"\n\
-  image_proxy: true\n\
-search:\n\
-  formats:\n\
-    - html\n\
-    - json\n\
-botdetection:\n\
-  ip_limit:\n\
-    filter_link_local: true\n\
-  internal_auth:\n\
-    active: false\n\
-ratelimit:\n\
-  method: ip\n\
-  limit_window: 600\n\
-  limit_cnt: 100' > /etc/searxng/settings.yml
+# Usamos un bloque cat <<EOF para asegurar que el formato sea YAML válido
+RUN cat <<EOF > /etc/searxng/settings.yml
+use_default_settings: true
+server:
+  base_url: http://84.247.137.97:8123/
+  secret_key: "Gonzales2026_Key_Secure"
+  image_proxy: true
+search:
+  formats:
+    - html
+    - json
+engines:
+  - name: wikidata
+    disabled: true
+  - name: ahmia
+    disabled: true
+  - name: torch
+    disabled: true
+botdetection:
+  ip_limit:
+    filter_link_local: true
+  internal_auth:
+    active: false
+ratelimit:
+  method: ip
+  limit_window: 600
+  limit_cnt: 100
+EOF
 
-# Permisos para que el usuario searxng pueda leerlo
 RUN chown searxng:searxng /etc/searxng/settings.yml && chmod 644 /etc/searxng/settings.yml
 
 USER searxng
