@@ -1,24 +1,17 @@
 services:
-  searxng:
-    image: docker.io/searxng/searxng:latest
+  whoogle-search:
+    image: ${WHOOGLE_IMAGE:-benbusby/whoogle-search:latest}
+    container_name: whoogle-search
     restart: always
     ports:
-      - "8123:8080"
-    volumes:
-      - ./config/:/etc/searxng/:Z
+      - "8124:5000"
     environment:
-      # Conexión brutal a tu IP pública. Nos saltamos el DNS roto de Docker/Coolify.
-      - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/1
-      - SEARXNG_REDIS_URL=redis://:Gonzales220@84.247.137.97:6379/1
-      
-      - SEARXNG_BASE_URL=http://84.247.137.97:8123/
-      - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
-      
-      # Forzamos los ajustes estructurales directo en entorno
-      - SEARXNG_NETWORK_NETWORK_TYPE=ipv4
-      - SEARXNG_SEARCH_FORMATS=["html","json"]
-      
-      # Desactivamos los motores que hacen ruido en el log
-      - SEARXNG_ENGINES_WIKIDATA_DISABLED=true
-      - SEARXNG_ENGINES_AHMIA_DISABLED=true
-      - SEARXNG_ENGINES_TORCH_DISABLED=true
+      - WHOOGLE_CONFIG_GET_ONLY=1
+      - WHOOGLE_CONFIG_THEME=dark
+      - WHOOGLE_CONFIG_ALTS=1
+      # Simple and effective
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
