@@ -1,18 +1,23 @@
 services:
   searxng:
     image: docker.io/searxng/searxng:latest
-    container_name: searxng-core  # <-- Este será tu "host"
+    container_name: searxng-core
     restart: always
-    # NO EXPOSEMOS PUERTOS AL MUNDO
+    # Conservamos el puerto para validación externa
     ports:
       - "8123:8080"
+    # Conectamos a la red de Coolify para comunicación interna
     networks:
       - coolify
     environment:
       - SEARXNG_VALKEY_URL=redis://:Gonzales220@84.247.137.97:6379/1
-      - SEARXNG_BASE_URL=http://searxng-core:8080/
+      - SEARXNG_REDIS_URL=redis://:Gonzales220@84.247.137.97:6379/1
+      - SEARXNG_BASE_URL=http://84.247.137.97:8123/
       - SEARXNG_SECRET_KEY=Gonzales2026_Key_Secure
-      - SEARXNG_SETTINGS={"use_default_settings":true,"server":{"image_proxy":true},"search":{"formats":["html","json"]},"botdetection":{"internal_auth":{"active":false}}}
+      
+      # INYECCIÓN MAESTRA:
+      # Desactivamos botdetection.internal_auth para que el formato JSON sea libre.
+      - SEARXNG_SETTINGS={"use_default_settings":true,"server":{"image_proxy":true},"search":{"formats":["html","json"]},"engines":[{"name":"wikidata","disabled":true},{"name":"ahmia","disabled":true},{"name":"torch","disabled":true}],"enabled_plugins":["Hash plugin","Self hoster"],"botdetection":{"ip_limit":{"stats_time_window":3600,"filter_link_local":true},"internal_auth":{"active":false}},"ratelimit":{"method":"ip","limit_window":600,"limit_cnt":100}}
 
 networks:
   coolify:
